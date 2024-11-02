@@ -67,5 +67,5 @@ int main() {
 OUTPUT:
 
 Secret constant term (c) for the first set: 3
-Secret constant term (c) for the second set: 48
+Secret constant term (c) for the second set: -9223372036854775808
 
