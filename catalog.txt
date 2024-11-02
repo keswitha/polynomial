@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+
+// Function to decode a value from a given base
+long long decode_value(int base, const char *value) {
+    return strtoll(value, NULL, base);
+}
+
+// Lagrange interpolation function to find the constant term c
+double lagrange_interpolation(int *x_values, long long *y_values, int k) {
+    double result = 0.0;
+
+    for (int i = 0; i < k; i++) {
+        double term = y_values[i];
+        for (int j = 0; j < k; j++) {
+            if (i != j) {
+                term *= (0 - x_values[j]) / (double)(x_values[i] - x_values[j]);
+            }
+        }
+        result += term;
+    }
+    return result;
+}
+
+int main() {
+    // First set of points
+    int n1 = 4;                     // Number of points in the first set
+    int k1 = 3;                     // Minimum number of points needed in the first set
+    int x_values1[] = {1, 2, 3};    // x values for the first set
+    char *y_values_str1[] = {"4", "111", "12"}; // Encoded y values as strings for the first set
+    int bases1[] = {10, 2, 10};     // Bases for each y value in the first set
+    
+    // Decode the y values based on their respective bases for the first set
+    long long y_values1[k1];
+    for (int i = 0; i < k1; i++) {
+        y_values1[i] = decode_value(bases1[i], y_values_str1[i]);
+    }
+
+    // Calculate the constant term (c) for the first set using Lagrange interpolation
+    long long secret1 = (long long)round(lagrange_interpolation(x_values1, y_values1, k1));
+    printf("Secret constant term (c) for the first set: %lld\n", secret1);
+
+    // Second set of points
+    int n2 = 5;                     // Number of points in the second set
+    int k2 = 3;                     // Minimum number of points needed in the second set
+    int x_values2[] = {2, 4, 6};    // x values for the second set
+    char *y_values_str2[] = {"15", "1010", "33"}; // Encoded y values as strings for the second set
+    int bases2[] = {10, 2, 10};     // Bases for each y value in the second set
+    
+    // Decode the y values based on their respective bases for the second set
+    long long y_values2[k2];
+    for (int i = 0; i < k2; i++) {
+        y_values2[i] = decode_value(bases2[i], y_values_str2[i]);
+    }
+
+    // Calculate the constant term (c) for the second set using Lagrange interpolation
+    long long secret2 = (long long)round(lagrange_interpolation(x_values2, y_values2, k2));
+    printf("Secret constant term (c) for the second set: %lld\n", secret2);
+
+    return 0;
+}
+
+
+
+OUTPUT:
+
+Secret constant term (c) for the first set: 3
+Secret constant term (c) for the second set: 48
+
